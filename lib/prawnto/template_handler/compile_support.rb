@@ -25,15 +25,19 @@ module Prawnto
 
       # TODO: kept around from railspdf-- maybe not needed anymore? should check.
       def ie_request?
-        @controller.request.env['HTTP_USER_AGENT'] =~ /msie/i
+        read_env('HTTP_USER_AGENT') =~ /msie/i
       end
       memoize :ie_request?
 
       # added to make ie happy with ssl pdf's (per naisayer)
       def ssl_request?
-        @controller.request.env['SERVER_PROTOCOL'].downcase == "https"
+        read_env('SERVER_PROTOCOL').downcase == "https"
       end
       memoize :ssl_request?
+
+      def read_env(variable)
+        @controller.request.env[variable] || ""
+      end
 
       # TODO: kept around from railspdf-- maybe not needed anymore? should check.
       def set_pragma
